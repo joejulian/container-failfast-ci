@@ -1,0 +1,39 @@
+variables:
+  FAILFASTCI_NAMESPACE: joejulian-robot1
+  DOCKER_DRIVER: overlay2
+  DOCKER_HOST: tcp://localhost:2375
+  API_IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_PROJECT_NAME-api:$CI_COMMIT_SHA
+  API_IMAGE_LATEST: $CI_REGISTRY_IMAGE/$CI_PROJECT_NAME-api:latest
+  WORKER_IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_PROJECT_NAME-worker:$CI_COMMIT_SHA
+  WORKER_IMAGE_LATEST: $CI_REGISTRY_IMAGE/$CI_PROJECT_NAME-worker:latest
+
+stages:
+  - build
+
+image: docker:latest
+
+services:
+  - docker:dind
+
+before_script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY    
+
+build_api:
+  stage: build
+  script:
+    - docker build . -f Dockerfile.api -t $API_IMAGE_TAG
+    - docker tag $API_IMAGE_TAG $API_IMAGE_LATEST
+    - docker push $API_IMAGE_TAG
+    - docker push $API_IMAGE_LATEST
+  only:
+    - master
+
+build_worker:
+  stage: build
+  script:
+    - docker build . -f Dockerfile.worker -t $WORKER_IMAGE_TAG
+    - docker tag $WORKER_IMAGE_TAG $WORKER_IMAGE_LATEST
+    - docker push $WORKER_IMAGE_TAG
+    - docker push $WORKER_IMAGE_LATEST
+  only:
+    - master

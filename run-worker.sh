@@ -1,0 +1,6 @@
+#!/bin/bash
+PORT=${PORT:-5000}
+export CELERY_BROKER_URL CELERY_BACKEND_URL GITHUB_CONTEXT GITLAB_TRIGGER \
+       GITLAB_TOKEN GITLAB_USER GITLAB_REPO
+
+celery -A hub2labhook.jobs.runner worker -l debug

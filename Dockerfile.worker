@@ -1,0 +1,10 @@
+FROM python:3.6.3-alpine3.6
+COPY run-worker.sh /
+COPY worker-requirements.txt /
+RUN apk --no-cache --update add bash openssl ca-certificates git && \
+    apk --no-cache --update add --virtual .build-dependencies \
+    libffi-dev build-base openssl-dev && \
+    pip install pip -U && \
+    pip install -r worker-requirements.txt && \
+    apk del .build-dependencies
+CMD /run-worker.sh

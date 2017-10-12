@@ -1,3 +1,6 @@
+variables:
+  FAILFASTCI_NAMESPACE: joejulian-robot1
+
 job1:
   stage: build
   script:

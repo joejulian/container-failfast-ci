@@ -7,4 +7,5 @@ stages:
 job1:
   stage: build
   script:
-    - echo "I'm a little teapot."
+    - echo "I'm a little teapot"
+    - echo "short and stout."

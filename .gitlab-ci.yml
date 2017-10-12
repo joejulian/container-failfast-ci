@@ -9,3 +9,4 @@ job1:
   script:
     - echo "I'm a little teapot"
     - echo "short and stout."
+    - echo "Here is my handle."

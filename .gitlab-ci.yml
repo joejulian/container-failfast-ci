@@ -3,8 +3,10 @@ variables:
   DOCKER_DRIVER: overlay2
   DOCKER_HOST: tcp://localhost:2375
   API_IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_PROJECT_NAME-api:$CI_COMMIT_SHA
+  API_IMAGE_RELEASE_TAG: $CI_REGISTRY_IMAGE/$CI_PROJECT_NAME-api:$CI_COMMIT_TAG
   API_IMAGE_LATEST: $CI_REGISTRY_IMAGE/$CI_PROJECT_NAME-api:latest
   WORKER_IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_PROJECT_NAME-worker:$CI_COMMIT_SHA
+  WORKER_IMAGE_RELEASE_TAG: $CI_REGISTRY_IMAGE/$CI_PROJECT_NAME-worker:$CI_COMMIT_TAG
   WORKER_IMAGE_LATEST: $CI_REGISTRY_IMAGE/$CI_PROJECT_NAME-worker:latest
 
 stages:
@@ -39,8 +41,6 @@ build_worker_nopublish:
   except:
     - master
 
-
-
 build_api:
   stage: build
   script:
@@ -60,3 +60,23 @@ build_worker:
     - docker push $WORKER_IMAGE_LATEST
   only:
     - master
+
+build_api_release:
+  stage: build
+  script:
+    - docker build . -f Dockerfile.api -t $API_IMAGE_TAG
+    - docker tag $API_IMAGE_TAG $API_IMAGE_LATEST
+    - docker push $API_IMAGE_RELEASE_TAG
+    - docker push $API_IMAGE_LATEST
+  only:
+    - "/v[0-9]+\\.[0-9]+\\.[0-9]+-[0-9]+.*/"
+
+build_worker_release:
+  stage: build
+  script:
+    - docker build . -f Dockerfile.worker -t $WORKER_IMAGE_TAG
+    - docker tag $WORKER_IMAGE_TAG $WORKER_IMAGE_LATEST
+    - docker push $WORKER_IMAGE_RELEASE_TAG
+    - docker push $WORKER_IMAGE_LATEST
+  only:
+    - "/v[0-9]+\\.[0-9]+\\.[0-9]+-[0-9]+.*/"

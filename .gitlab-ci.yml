@@ -69,7 +69,7 @@ build_api_release:
     - docker push $API_IMAGE_RELEASE_TAG
     - docker push $API_IMAGE_LATEST
   only:
-    - "/v[0-9]+\\.[0-9]+\\.[0-9]+-[0-9]+.*/"
+    - /^v[0-9]+\.[0-9]+\.[0-9]+.*/
 
 build_worker_release:
   stage: build
@@ -79,4 +79,4 @@ build_worker_release:
     - docker push $WORKER_IMAGE_RELEASE_TAG
     - docker push $WORKER_IMAGE_LATEST
   only:
-    - "/v[0-9]+\\.[0-9]+\\.[0-9]+-[0-9]+.*/"
+    - /^v[0-9]+\.[0-9]+\.[0-9]+.*/

@@ -18,6 +18,29 @@ services:
 before_script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY    
 
+
+build_api_nopublish:
+  stage: build
+  script:
+    - echo "THIS IS A BUILD-ONLY JOB"
+    - docker build . -f Dockerfile.api -t $API_IMAGE_TAG
+  only:
+    - branches
+  except:
+    - master
+
+build_worker_nopublish:
+  stage: build
+  script:
+    - echo "THIS IS A BUILD-ONLY JOB"
+    - docker build . -f Dockerfile.worker -t $WORKER_IMAGE_TAG
+  only:
+    - branches
+  except:
+    - master
+
+
+
 build_api:
   stage: build
   script:

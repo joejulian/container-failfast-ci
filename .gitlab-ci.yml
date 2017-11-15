@@ -64,19 +64,15 @@ build_worker:
 build_api_release:
   stage: build
   script:
-    - docker build . -f Dockerfile.api -t $API_IMAGE_TAG
-    - docker tag $API_IMAGE_TAG $API_IMAGE_LATEST
+    - docker build . -f Dockerfile.api -t $API_IMAGE_RELEASE_TAG
     - docker push $API_IMAGE_RELEASE_TAG
-    - docker push $API_IMAGE_LATEST
   only:
     - /^v[0-9]+\.[0-9]+\.[0-9]+.*/
 
 build_worker_release:
   stage: build
   script:
-    - docker build . -f Dockerfile.worker -t $WORKER_IMAGE_TAG
-    - docker tag $WORKER_IMAGE_TAG $WORKER_IMAGE_LATEST
+    - docker build . -f Dockerfile.worker -t $WORKER_IMAGE_RELEASE_TAG
     - docker push $WORKER_IMAGE_RELEASE_TAG
-    - docker push $WORKER_IMAGE_LATEST
   only:
     - /^v[0-9]+\.[0-9]+\.[0-9]+.*/
